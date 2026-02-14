@@ -23,9 +23,9 @@ namespace WebAPI.Controllers
             {
                 return Ok(_WebDbContext.MachineManufacturers.AsNoTracking().ToList());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
 
@@ -44,9 +44,9 @@ namespace WebAPI.Controllers
                     return BadRequest("Record Not Found");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
 
@@ -59,7 +59,7 @@ namespace WebAPI.Controllers
                 _WebDbContext.SaveChanges();
                 return Ok("Record Save Successfully");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
                     return BadRequest("Record Not Found");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
@@ -105,7 +105,7 @@ namespace WebAPI.Controllers
                     return BadRequest("Record Not Found");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }

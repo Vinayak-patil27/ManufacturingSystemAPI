@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Models;
+using WebAPI.ViewModels;
 
 namespace WebAPI.Controllers
 {
@@ -15,6 +16,53 @@ namespace WebAPI.Controllers
         {
             _WebDbContext = WebDbContext;
         }
+        [HttpGet("OperationDetails")]
+        public IActionResult GetCustomersWithComponentOperations(string? search)
+        {
+            try
+            {
+                var result = from cust in _WebDbContext.Customers.AsNoTracking()
+                             join compo in _WebDbContext.ComponentMasters.AsNoTracking()
+                                 on cust.CustomerId equals compo.CustomerId into componentGroup
+                         
+                             from compgrp in componentGroup.DefaultIfEmpty()
+                             join compOpr in _WebDbContext.ComponentOperationMasters.AsNoTracking()
+                                 on compgrp.ComponentId equals compOpr.ComponentId into operationGroup
+                             from op in operationGroup.DefaultIfEmpty()
+                             join machine in _WebDbContext.MachineMasters.AsNoTracking()
+                                 on (op == null ? (long?)null : op.MachineId) equals machine.MachineId into machineGroup
+                             from mach in machineGroup.DefaultIfEmpty()
+                             select new OperationDetailsViewModel
+                             {
+                                 CustomerId = cust.CustomerId,
+                                 CustomerName = cust.CustomerName,
+                                 ComponentId = compgrp == null ? (long?)null : compgrp.ComponentId,
+                                 ComponentName = compgrp == null ? null : compgrp.ComponentName,
+                                 PartNo = compgrp == null ? null : compgrp.PartNo,
+                                 ECN = compgrp == null ? null : compgrp.ECN,
+                                 TrNo = op == null ? (long?)null : op.TrNo,
+                                 OperationCode = op == null ? null : op.OperationCode,
+                                 OperationName = op == null ? null : op.OperationName,
+                                 OperationDescription = op == null ? null : op.OperationDescription,
+                                 OperationType = op == null ? (int?)null : op.OperationType,
+                                 MachineId = op == null ? (long?)null : op.MachineId,
+                                 MachineName = mach == null ? null : mach.MachineName
+                             };
+
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    result = result.Where(x => (x.CustomerName != null && x.CustomerName.Contains(search)) ||
+                                          (x.ComponentName != null && x.ComponentName.Contains(search)) ||
+                                          (x.OperationCode != null && x.OperationCode.Contains(search)) ||
+                                          (x.OperationName != null && x.OperationName.Contains(search)));
+                }
+                return Ok(result.ToList());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
+            }
+        }
 
         [HttpGet]
         public IActionResult Get()
@@ -23,14 +71,14 @@ namespace WebAPI.Controllers
             {
                 return Ok(_WebDbContext.ComponentOperationMasters.AsNoTracking().ToList());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
         
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(long id)
         {
             try
             { 
@@ -44,9 +92,9 @@ namespace WebAPI.Controllers
                     return BadRequest("Data Not Found");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
         
@@ -59,18 +107,18 @@ namespace WebAPI.Controllers
                 _WebDbContext.SaveChanges();
                return Ok("Record Save Successfully");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
          }
 
          [HttpPut("{id}")]
-         public IActionResult Put(ComponentOperationMaster Component, int id)
+         public IActionResult Put(ComponentOperationMaster Component, long id)
          {
              try
             {
-                var data = _WebDbContext.ComponentOperationMasters.Where(x => x.ComponentId == id).AsNoTracking().FirstOrDefault();
+                var data = _WebDbContext.ComponentOperationMasters.Where(x => x.TrNo == id).AsNoTracking().FirstOrDefault();
                 if (data != null)
                 {
                     _WebDbContext.ComponentOperationMasters.Update(Component);
@@ -82,18 +130,18 @@ namespace WebAPI.Controllers
                     return BadRequest("Data Not Found");
                 }
              }
-             catch (Exception ex)
+             catch (Exception)
              {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
              }
           }
 
           [HttpDelete("{id}")]
-          public IActionResult Delete(int id)
+          public IActionResult Delete(long id)
           {
               try
             {
-                var data = _WebDbContext.ComponentOperationMasters.Where(x => x.ComponentId == id).AsNoTracking().FirstOrDefault();
+                var data = _WebDbContext.ComponentOperationMasters.Where(x => x.TrNo == id).AsNoTracking().FirstOrDefault();
                 if (data != null)
                 {
                     _WebDbContext.ComponentOperationMasters.Remove(data);
@@ -105,7 +153,7 @@ namespace WebAPI.Controllers
                     return BadRequest("Data Not Found");
                 }
               }
-              catch (Exception ex)
+              catch (Exception)
               {
                  return BadRequest("Can't Take Any Actions Due To Server Problem");
               }

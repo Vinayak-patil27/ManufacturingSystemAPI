@@ -23,13 +23,13 @@ namespace WebAPI.Controllers
             {
                 return Ok(_WebDbContext.Locations.AsNoTracking().ToList());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(long id)
         {
             try
             {
@@ -43,9 +43,9 @@ namespace WebAPI.Controllers
                     return BadRequest("Record Not Found");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
         
@@ -58,7 +58,7 @@ namespace WebAPI.Controllers
                  _WebDbContext.SaveChanges();
                return Ok("Record Save Successfully");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }

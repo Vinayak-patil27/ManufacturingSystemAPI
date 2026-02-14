@@ -40,9 +40,9 @@ public partial class WebDbContext : DbContext
 
             entity.Property(e => e.ComponentId).ValueGeneratedNever();
             entity.Property(e => e.ComponentName).HasMaxLength(64);
-            entity.Property(e => e.Enc)
+            entity.Property(e => e.ECN)
                 .HasMaxLength(16)
-                .HasColumnName("ENC");
+                .HasColumnName("ECN");
             entity.Property(e => e.PartNo).HasMaxLength(32);
         });
 
@@ -55,7 +55,7 @@ public partial class WebDbContext : DbContext
             entity.Property(e => e.TrNo).HasDefaultValueSql("nextval('\"ComponentOperation_Trno_seq\"'::regclass)");
             entity.Property(e => e.OperationCode)
                 .HasMaxLength(16)
-                .HasColumnName(" OperationCode");
+                .HasColumnName("OperationCode");
             entity.Property(e => e.OperationDescription).HasColumnType("character varying");
             entity.Property(e => e.OperationName).HasMaxLength(64);
         });
@@ -83,7 +83,7 @@ public partial class WebDbContext : DbContext
                 .HasColumnName("LocationID");
             entity.Property(e => e.Latitude).HasPrecision(8, 6);
             entity.Property(e => e.LocationName).HasMaxLength(128);
-            entity.Property(e => e.Longitude).HasPrecision(8, 6);
+            entity.Property(e => e.Longitude).HasPrecision(9, 6);
         });
 
         modelBuilder.Entity<MachineManufacturer>(entity =>
@@ -105,12 +105,13 @@ public partial class WebDbContext : DbContext
             entity.Property(e => e.MachineId).ValueGeneratedNever();
             entity.Property(e => e.MachineModel)
                 .HasMaxLength(16)
-                .HasColumnName("MachineModel ");
+                .HasColumnName("MachineModel");
             entity.Property(e => e.MachineName).HasMaxLength(64);
             entity.Property(e => e.MachineSerialNumber)
                 .HasMaxLength(16)
-                .HasColumnName("MachineSerialNumber ");
-            entity.Property(e => e.YearofManufacture).HasColumnName(" YearofManufacture");
+                .HasColumnName("MachineSerialNumber");
+            entity.Property(e => e.YearofManufacture).HasColumnName("YearofManufacture");
+            entity.Property(e => e.LoactionId).HasColumnName("LoactionId");
         });
 
         modelBuilder.Entity<User>(entity =>

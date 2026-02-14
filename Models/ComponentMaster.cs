@@ -13,5 +13,5 @@ public partial class ComponentMaster
 
     public string? PartNo { get; set; }
 
-    public string? Enc { get; set; }
+    public string? ECN { get; set; }
 }

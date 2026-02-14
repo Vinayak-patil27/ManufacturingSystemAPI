@@ -25,11 +25,11 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(long id)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex);
+                return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
         }
         
@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(MachineMaster machine, int id)
+        public IActionResult Put(MachineMaster machine, long id)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(long id)
         {
             try
             {

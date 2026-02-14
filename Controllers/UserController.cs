@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
                     return Ok("Please Check UserID Or Password");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
