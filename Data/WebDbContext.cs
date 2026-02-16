@@ -40,9 +40,9 @@ public partial class WebDbContext : DbContext
 
             entity.Property(e => e.ComponentId).ValueGeneratedNever();
             entity.Property(e => e.ComponentName).HasMaxLength(64);
-            entity.Property(e => e.ECN)
+            entity.Property(e => e.ENC)
                 .HasMaxLength(16)
-                .HasColumnName("ECN");
+                .HasColumnName("ENC");
             entity.Property(e => e.PartNo).HasMaxLength(32);
         });
 

@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
                                  ComponentId = compgrp == null ? (long?)null : compgrp.ComponentId,
                                  ComponentName = compgrp == null ? null : compgrp.ComponentName,
                                  PartNo = compgrp == null ? null : compgrp.PartNo,
-                                 ECN = compgrp == null ? null : compgrp.ECN,
+                                 ECN = compgrp == null ? null : compgrp.ENC,
                                  TrNo = op == null ? (long?)null : op.TrNo,
                                  OperationCode = op == null ? null : op.OperationCode,
                                  OperationName = op == null ? null : op.OperationName,
@@ -107,7 +107,7 @@ namespace WebAPI.Controllers
                 _WebDbContext.SaveChanges();
                return Ok("Record Save Successfully");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest("Can't Take Any Actions Due To Server Problem");
             }
